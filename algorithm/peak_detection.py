@@ -13,7 +13,7 @@ def process_record(record_path, max_duration=20):
     # Ambil hanya max_duration detik
     max_samples = fs * max_duration
     if len(signal) > max_samples:
-        p = 1
+        signal = signal[:max_samples]
 
     ptpp = Pan_Tompkins_Plus_Plus()
 
