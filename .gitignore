@@ -1,0 +1,41 @@
+# Python bytecode
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+venv/
+.venv/
+env/
+ENV/
+
+# Build / executable (PyInstaller)
+build/
+dist/
+*.spec
+
+# IDE configs
+.idea/
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Temp
+*.tmp
+*.bak
+
+# Jupyter
+.ipynb_checkpoints/
+
+Dataset/
+Archive/
+helper/
+# Optional: ignore dataset if large
+# Dataset_example/*.csv
+# Dataset_example/*.txt
