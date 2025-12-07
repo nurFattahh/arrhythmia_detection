@@ -125,7 +125,7 @@ Sample ECG files are provided under:
 Dataset_example/
 
 pls use folder Dataset (not Dataset_example) for running program without error
-You can add more datasets (`.csv`, `.txt`, MIT-BIH format) for testing or benchmarking.
+You can add more datasets (`.csv`, `.dat`, MIT-BIH format) for testing or benchmarking.
 
 ---
 
@@ -139,6 +139,17 @@ You can add more datasets (`.csv`, `.txt`, MIT-BIH format) for testing or benchm
 - Start/Stop streaming  
 - Load offline dataset
 
+---
+
+## 🖥 GUI Preview
+
+Here's the GUI preview:
+
+![GUI Preview](assets/offline.png)
+
+![GUI Preview](assets/realtime.png)
+
+![GUI Preview](assets/sensor.jpg)
 ---
 
 # 👨‍💻 Author
