@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pyqtgraph as pg
 import psutil
+import tracemalloc
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QFrame, QLineEdit, QPushButton, QComboBox, QTextEdit, QFileDialog, QMessageBox, QGraphicsDropShadowEffect
 from PyQt5.QtCore import Qt, QTimer
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -374,6 +375,8 @@ class ECGApp(QMainWindow, PlotMixin, RecordMixin, StreamMixin, LogMixin, DetailM
 
         self.first_exec_time = 0
         self.first_memory_used = 0
+        
+        self.last_memory_time = 0
 
     # ==========================================================
     def start_stream(self):
@@ -504,6 +507,17 @@ class ECGApp(QMainWindow, PlotMixin, RecordMixin, StreamMixin, LogMixin, DetailM
             minutes, seconds = divmod(int(elapsed), 60)
             self.system_exec_time.setText(f"Waktu Eksekusi Sistem: {minutes:02d}:{seconds:02d}")
 
+        memory_now = time.time()
+        if (memory_now - self.last_memory_time) >= 10.0:
+            tracemalloc.start()
+            fs, corrected_peaks, exec_time, bpm, algo_mem = self.compute_heart_rate(data, self.fs)
+            current, peak = tracemalloc.get_traced_memory()
+            algo_mem = peak / 1024  # konversi ke KB
+            tracemalloc.stop()
+            
+            self.system_memory_usage.setText(f"Penggunaan Memory: {algo_mem:.5f} KB")
+            print(f"[ALGO] Memory digunakan: {algo_mem:.5f} kb | Waktu: {elapsed:.4f} s")
+            self.last_memory_time = memory_now
 
         # hitung BPM tiap 0.5 detik
         now = time.time()
@@ -543,7 +557,7 @@ class ECGApp(QMainWindow, PlotMixin, RecordMixin, StreamMixin, LogMixin, DetailM
                 self.detail_interval.setText("Rata-rata Interval: -")
             self.detail_exec_time.setText(f"Waktu Eksekusi Algoritma: {exec_time:.7f} s")
             # mem_usage = self.get_memory_usage()
-            self.system_memory_usage.setText(f"Penggunaan Memory: {algo_mem:.5f} KB")
+  
 
             # === Tampilkan titik R-peak merah ===
             if corrected_peaks is not None and len(corrected_peaks) > 0:
@@ -642,6 +656,6 @@ class ECGApp(QMainWindow, PlotMixin, RecordMixin, StreamMixin, LogMixin, DetailM
 
         if (self.first_memory_used == 0):
             self.first_memory_used = mem_used
-        print(f"[ALGO] Memory digunakan: {mem_used:.5f} kb | Waktu: {elapsed:.4f} s")
+        # print(f"[ALGO] Memory digunakan: {mem_used:.5f} kb | Waktu: {elapsed:.4f} s")
 
         return result, mem_used, elapsed

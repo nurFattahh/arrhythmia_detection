@@ -207,12 +207,12 @@ ecgid_path = r"D:\coding\Skripsi\Dataset\ECG-ID_Database"
 output_path = r"D:\coding\Skripsi\monitoringApp\algorithm\evaluasi_pantompkins2.xlsx"
 
 records_to_plot_ecgid = [
-    "Person_01/rec_1", 
-    "Person_01/rec_2",
-    "Person_01/rec_3"
+    "Person_02/rec_16", 
+    "Person_02/rec_18", 
+
 ]
 
-records_to_plot_mitbih = ["100", "101"]
+records_to_plot_mitbih = [ "207", "233"]
 
 
 print("\n=== Evaluasi ECG-ID ===")

@@ -95,6 +95,36 @@ def generate_synthetic_ecg(duration=10, fs=200):
     
     return ecg, t
 
+def load_ecgid_record(record_path, channel=0, duration=None):
+    """
+    Load ECG-ID Database record
+    record_path: path TANPA ekstensi (.dat/.hea)
+    """
+    try:
+        import wfdb
+
+        print(f"Reading ECG-ID record: {record_path}")
+        record = wfdb.rdrecord(record_path)
+
+        ecg = record.p_signal[:, channel]
+        fs = record.fs
+
+        if duration is not None:
+            samples = int(duration * fs)
+            ecg = ecg[:samples]
+
+        t = np.arange(len(ecg)) / fs
+
+        print("Record info:")
+        print(f"  - Sampling frequency: {fs} Hz")
+        print(f"  - Channels: {record.sig_name}")
+        print(f"  - Signal length: {len(ecg)} samples ({len(ecg)/fs:.2f} s)")
+
+        return ecg, t, fs
+
+    except Exception as e:
+        raise Exception(f"Error reading ECG-ID data: {e}")
+
 
 def load_mitbih_record(mitbih_path, record_name=None, duration=10):
     """Load MIT-BIH record"""
@@ -381,8 +411,16 @@ def plot_all_stages(stages, t, locs, pks, THR_SIG, THR_NOISE, qrs_peaks, noise_p
     plt.axhline(y=THR_SIG, color=colors['threshold_sig'], linestyle='--', 
                 linewidth=2, label=f'THR_SIG = {THR_SIG:.4f}')
     plt.axhline(y=THR_NOISE, color=colors['threshold_noise'], linestyle='--', 
-                linewidth=2, label=f'THR_NOISE = {THR_NOISE:.4f}')
+                linewidth=2, label=f'THR_2 = {THR_NOISE:.4f}')
     
+    plt.title('Stage 6: Peak Detection & Thresholds')
+    plt.xlabel('Time (seconds)')
+    plt.ylabel('Amplitude')
+    plt.legend()
+    plt.grid(True)
+
+    plt.show()
+
     # Plot QRS peaks
     if qrs_peaks:
         qrs_times = np.array(qrs_peaks) / fs
@@ -422,8 +460,18 @@ if __name__ == "__main__":
     
     # Try to load MIT-BIH data
     try:
-        print("\nReading MIT-BIH Arrhythmia Database...")
-        ecg, t, fs = load_mitbih_record(mitbih_path, record_name=None, duration=10)
+        # print("\nReading MIT-BIH Arrhythmia Database...")
+        # ecg, t, fs = load_mitbih_record(mitbih_path, record_name=None, duration=10)
+
+        print("\nECG-ID loaded successfully!")
+        ecgid_record_path = r"D:\coding\Skripsi\Dataset\ECG-ID_Database\Person_02\rec_18"
+
+        ecg, t, fs = load_ecgid_record(
+            record_path=ecgid_record_path,
+            channel=0,      # ECG-ID biasanya single lead
+            duration=10
+        )
+
         
     except Exception as e:
         print(f"\n{e}")

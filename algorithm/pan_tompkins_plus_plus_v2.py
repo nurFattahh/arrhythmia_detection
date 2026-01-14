@@ -115,11 +115,11 @@ class Pan_Tompkins_Plus_Plus():
         # Ambil amplitudo-nya
         pks = [ecg_m[val] for val in locs]
 
-        # === Tambahan: buang puncak dengan amplitudo terlalu kecil (misal <1% dari sinyal max) ===
-        amp_threshold = 0.001 * np.max(ecg_m)  # 1% dari maksimum sinyal
-        valid_mask = np.array(pks) > amp_threshold
-        locs = np.array(locs)[valid_mask]
-        pks = np.array(pks)[valid_mask]
+        # # === Tambahan: buang puncak dengan amplitudo terlalu kecil (misal <1% dari sinyal max) ===
+        # amp_threshold = 0.001 * np.max(ecg_m)  # 1% dari maksimum sinyal
+        # valid_mask = np.array(pks) > amp_threshold
+        # locs = np.array(locs)[valid_mask]
+        # pks = np.array(pks)[valid_mask]
  
         ''' Initialize Some Other Parameters '''
         LLp = len(pks)

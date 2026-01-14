@@ -32,7 +32,7 @@ class ShimmerReader(QThread):
             cur_value = pkt[EChannelType.EXG_ADS1292R_1_CH1_24BIT]
             # Konversi ke mV (sesuaikan gain jika perlu)
             value_mv = ShimmerReader.adc_to_millivolts(self, cur_value, gain=6, offset=0)
-            print(f"Amplitudo: {value_mv:.2f} mV")
+            # print(f"Amplitudo: {value_mv:.2f} mV")
             self.new_data.emit(value_mv)
         except KeyError:
             # Channel belum tersedia
